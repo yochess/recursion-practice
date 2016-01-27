@@ -51,7 +51,7 @@ var numToText = function(str) {
     if(!isNaN(word)) {
       var num = word*1;
       if(num === 0) {
-        words[index] = 0;
+        words[index] = 'zero';
       } else {
         words[index] = numToWord(num);
       }
