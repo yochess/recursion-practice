@@ -8,24 +8,6 @@ Ex: numToText("I have 5 dogs and 6 ponies"); // returns "I have five dogs and si
 
 */
 
-/* Pseudo code
-
-LOOKUP TABLE consists of:
-- numbers corresponding to the word from zero to nineteen
-
-PROCEDURE:
-split the string into an array of words
-for each word, 
-  if it's not a digit then return the word
-  else
-    if num is between 0 and 19 then return its lookup value
-    ------ under construction ------
-    elseif num is between 20 and 99, 
-    elseif
-    --------------------------------
-*/
-
-
 var numToText = function(str) {
 	var lookupTable = {
     1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five',
@@ -40,6 +22,7 @@ var numToText = function(str) {
 
   var numToWord = function(num) {
     var rest;
+    var base;
     if(num*1 === 0) {
       return "";
     } else if(lookupTable[num]) {
@@ -49,10 +32,18 @@ var numToText = function(str) {
       rest = num - tens;
       return lookupTable[tens] + "-" + lookupTable[rest];
     } else if(num >= 100 && num < 1000) {
-      var base = Math.floor(num/100);
+      base = Math.floor(num/100);
       rest = num - (base*100);
-      return lookupTable[base] + " hundred" + numToWord(rest);
-    } 
+      return (lookupTable[base] + " hundred " + numToWord(rest)).trim();
+    } else {
+      var numString = num.toString();
+      var length = numString.length;
+      var bigNumIndex = Math.floor((length-1)/3) -1;
+      var middleIndex = length % 3 || 3;
+      base = numString.slice(0, middleIndex) *1;
+      rest = numString.slice(middleIndex) *1;
+      return (numToWord(base) + " " + bigNumTable[bigNumIndex] + " " + numToWord(rest)).trim();
+    }
   };
 
   var words = str.split(" ");
@@ -69,3 +60,18 @@ var numToText = function(str) {
 
   return words.join(" ");
 };
+
+console.log(numToText("99 worlds in mario 2"));
+// => ninety-nine worlds in mario two
+
+console.log(numToText("999 bottles of beer with 300 left"));
+// => nine hundred ninety-nine bottles of beer with three hundred left
+
+console.log(numToText("A car costs 43500 dollars"));
+// => A car costs forty-three thousand five hundred dollars
+
+console.log(numToText("A house costs 1234567 dollars"));
+// => A house costs one million two hundred thirty-four thousand five hundred sixty-seven dollars
+
+console.log(numToText("With 40000000500 dollars, Bill Gates can buy 32400 houses"));
+// => With forty billion five hundred dollars, Bill Gates can buy thirty-two thousand four hundred houses
